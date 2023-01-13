@@ -1,0 +1,4 @@
+name: SimpleVeinMiner
+version: '${project.version}'
+main: net.miau.simpleveinminer.SimpleVeinMiner
+authors: [ Miau_ ]
