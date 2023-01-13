@@ -7,8 +7,10 @@ Will work with Silk Touch.
 Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
 Will ignore if player is in creative.
 
-config.yml:
+**config.yml** contents:
 > needsPermission: false
+Permission for use if 'needsPermission' on the config is set to **true**:
+  - simpleveinminer.use
 
 #### Please let me know if something is missing on it. I tried to code it as simple and working as possible, below is my discord details for ideas or bug fixes(support):
 My discord: **Miau#0307** (This may change, read below for server reason).
