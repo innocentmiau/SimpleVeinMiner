@@ -7,7 +7,7 @@ A very simple Vein Miner plugin, just add on the server and it will work right a
 - [x] Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
 - [x] Will ignore if player is in creative.
 
-**config.yml** contents:
+#### **config.yml** contents:
 > needsPermission: false
 
 Permission for use if 'needsPermission' on the config is set to **true**:
