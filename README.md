@@ -3,12 +3,16 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 
 A very simple Vein Miner plugin, just add on the server and it will work right away with nothing to config with:
 > With this plugin, it will automatically mine the entire vein upon breaking one of the blocks.
-Will work with Silk Touch.
-Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
-Will ignore if player is in creative.
+
+> Will work with Silk Touch.
+
+> Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
+
+> Will ignore if player is in creative.
 
 **config.yml** contents:
 > needsPermission: false
+
 Permission for use if 'needsPermission' on the config is set to **true**:
   - simpleveinminer.use
 
