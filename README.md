@@ -6,13 +6,21 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 - [x] Will work with Silk Touch.
 - [x] Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
 - [x] Will ignore if player is in creative.
-- [x] Optional permission to use(read below config.yml information).
+- [x] Option for permission to use(read below config.yml information).
+- [x] Option to check for diagonal ores(read below config.yml information).
+- [x] Option to cancel if the player is sneaking(read below config.yml information).
 
 ## **config.yml** contents:
 > needsPermission: false
 
+> checkForDiagonalOres: false
+
+> cancelIfSneaking: false
+
 Permission for use if 'needsPermission' on the config is set to **true**:
   - simpleveinminer.use
+Option 'checkForDiagonalOres' if set to **true** will check the entirety of a vein even when blocks are not directyly touching(in diagonal directions). (This comes by default set to false)
+Option 'cancelIfSneaking' if set to **true** will allow players to not mine the entire vein when they are sneaking. (useful for mining ores used in builds or when a player doesn't want to break the entire vein with the same pickaxe, or other reasons)
 
 ## Please let me know if something is missing on it.
 I tried to code it as simple and working as possible, below is my discord details for ideas or bug fixes(support):
