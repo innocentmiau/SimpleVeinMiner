@@ -24,3 +24,5 @@ I tried to code it as simple and working as possible, below is my discord detail
 
 ### Good for simple SMPs that require such plugins to not overload server.
 *If you need this plugin in a older version, please do message me and I will update it.*
+
+DO NOT copy/download my code and release as your own.
