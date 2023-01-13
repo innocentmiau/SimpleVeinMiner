@@ -7,7 +7,7 @@ Will work with Silk Touch.
 Will work fine with Durability enchants.(It will reduce the durability of the item used just like vanilla mechanics)
 Will ignore if player is in creative.
 
-## Please let me know if something is missing on it. I tried to code it as simple and working as possible, below is my discord details for ideas or bug fixes(support):
+#### Please let me know if something is missing on it. I tried to code it as simple and working as possible, below is my discord details for ideas or bug fixes(support):
 My discord: Miau#0307 (This may change, read below for server reason).
 My discord server: https://discord.gg/Yg3Dbs2uVG - Can be used for just chatting or a way to find me in case my discord discriminator(tag, the #) changes because of discord nitro or just me swapping it.)
 
