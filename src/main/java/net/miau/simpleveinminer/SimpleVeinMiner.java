@@ -1,5 +1,6 @@
 package net.miau.simpleveinminer;
 
+import net.miau.simpleveinminer.utils.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -7,10 +8,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExpEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +26,8 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
 
     private final ArrayList<BlockFace> blockFaces = new ArrayList<>();
     private boolean needsPermission = false;
+    private boolean checkForDiagonalOres = false;
+    private boolean cancelIfSneaking = false;
 
     @Override
     public void onEnable() {
@@ -32,6 +39,16 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
             saveConfig();
         }
         this.needsPermission = getConfig().getBoolean("needsPermission");
+        if (!getConfig().contains("checkForDiagonalOres")) {
+            getConfig().set("checkForDiagonalOres", this.checkForDiagonalOres);
+            saveConfig();
+        }
+        this.checkForDiagonalOres = getConfig().getBoolean("checkForDiagonalOres");
+        if (!getConfig().contains("cancelIfSneaking")) {
+            getConfig().set("cancelIfSneaking", this.cancelIfSneaking);
+            saveConfig();
+        }
+        this.cancelIfSneaking = getConfig().getBoolean("cancelIfSneaking");
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
@@ -41,6 +58,15 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
         blockFaces.add(BlockFace.SOUTH);
         blockFaces.add(BlockFace.EAST);
         blockFaces.add(BlockFace.WEST);
+
+        new UpdateChecker(this, 107256).getVersion(version -> {
+            if (!this.getDescription().getVersion().equals(version)) {
+                getLogger().info("---[SimpleVeinMiner]---");
+                getLogger().info("[>] There is a new update available.");
+                getLogger().info("[>] current version: " + this.getDescription().getVersion());
+                getLogger().info("[>] latest version: " + version);
+            }
+        });
 
         new Metrics(this, 17391);
     }
@@ -55,6 +81,7 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
                 || !event.getBlock().getType().toString().contains("_ORE")
                 || event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
         if (this.needsPermission && !event.getPlayer().hasPermission("simpleveinminer.use")) return;
+        if (this.cancelIfSneaking && event.getPlayer().isSneaking()) return;
         ItemStack hand = event.getPlayer().getInventory().getItemInMainHand();
         ArrayList<Block> allBlocks = new ArrayList<>(blocksAround(event.getBlock()));
         int newBlocks = allBlocks.size();
@@ -69,6 +96,12 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
             newBlocks = toAdd.size();
             allBlocks.addAll(toAdd);
         }
+        if (allBlocks.size() == 0) return;
+        allBlocks.remove(event.getBlock());
+        // event.getPlayer().sendMessage("Experience: " + event.getExpToDrop());
+        // event.getPlayer().sendMessage("Blocks: " + allBlocks.size());
+        event.setExpToDrop(event.getExpToDrop() * (allBlocks.size() + 1));
+        // event.getPlayer().sendMessage("Total Experience: " + event.getExpToDrop());
         for (Block toBreak : allBlocks) {
             if (toBreak.breakNaturally(hand)) {
                 if (hand.getEnchantments().containsKey(Enchantment.DURABILITY)) {
@@ -97,6 +130,27 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
             if (b.getType() != block.getType()) continue;
             newBlocks.add(b);
         }
+        if (this.checkForDiagonalOres) {
+            // top row
+            for (int i = -1; i<2; i++) {
+                checkBlock(block.getType(), block.getRelative(1, i, 1), newBlocks);
+                checkBlock(block.getType(), block.getRelative(1, i, 0), newBlocks);
+                checkBlock(block.getType(), block.getRelative(1, i, -1), newBlocks);
+
+                checkBlock(block.getType(), block.getRelative(0, i, 1), newBlocks);
+                checkBlock(block.getType(), block.getRelative(0, i, -1), newBlocks);
+
+                checkBlock(block.getType(), block.getRelative(-1, i, 1), newBlocks);
+                checkBlock(block.getType(), block.getRelative(-1, i, 0), newBlocks);
+                checkBlock(block.getType(), block.getRelative(-1, i, -1), newBlocks);
+            }
+        }
         return newBlocks;
+    }
+
+    private void checkBlock(Material type, Block block, ArrayList<Block> blocks) {
+        if (!blocks.contains(block) && block.getType() == type) {
+            blocks.add(block);
+        }
     }
 }
