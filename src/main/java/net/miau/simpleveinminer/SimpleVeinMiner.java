@@ -1,6 +1,5 @@
 package net.miau.simpleveinminer;
 
-import net.miau.simpleveinminer.utils.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -8,17 +7,18 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExpEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -59,20 +59,38 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
         blockFaces.add(BlockFace.EAST);
         blockFaces.add(BlockFace.WEST);
 
-        new UpdateChecker(this, 107256).getVersion(version -> {
-            if (!this.getDescription().getVersion().equals(version)) {
+        new Metrics(this, 17391);
+
+        try {
+            URL url = new URL("https://api.github.com/repos/innocentmiau/SimpleVeinMiner/releases/latest");
+            String s = stream(url);
+            String version = s.substring(s.indexOf("\"tag_name\":\"") + 13, s.indexOf("\"target_commitish\"") - 2);
+            if (!version.equals(this.getDescription().getVersion())) {
                 getLogger().info("---[SimpleVeinMiner]---");
                 getLogger().info("[>] There is a new update available.");
                 getLogger().info("[>] current version: " + this.getDescription().getVersion());
                 getLogger().info("[>] latest version: " + version);
             }
-        });
-
-        new Metrics(this, 17391);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
     public void onDisable() {
+    }
+
+    public String stream(URL url) throws IOException {
+        try (InputStream input = url.openStream()) {
+            InputStreamReader isr = new InputStreamReader(input);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuilder json = new StringBuilder();
+            int c;
+            while ((c = reader.read()) != -1) {
+                json.append((char) c);
+            }
+            return json.toString();
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
