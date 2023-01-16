@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -98,9 +99,11 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
         if (event.isCancelled()
                 || !event.getBlock().getType().toString().contains("_ORE")
                 || event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
-        if (this.needsPermission && !event.getPlayer().hasPermission("simpleveinminer.use")) return;
-        if (this.cancelIfSneaking && event.getPlayer().isSneaking()) return;
+        Player player = event.getPlayer();
+        if (this.cancelIfSneaking && player.isSneaking()) return;
         ItemStack hand = event.getPlayer().getInventory().getItemInMainHand();
+        if (!hand.getType().toString().contains("_PICKAXE")) return;
+        if (this.needsPermission && !player.hasPermission("simpleveinminer.use")) return;
         ArrayList<Block> allBlocks = new ArrayList<>(blocksAround(event.getBlock()));
         int newBlocks = allBlocks.size();
         while (newBlocks > 0) {
@@ -116,10 +119,7 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
         }
         if (allBlocks.size() == 0) return;
         allBlocks.remove(event.getBlock());
-        // event.getPlayer().sendMessage("Experience: " + event.getExpToDrop());
-        // event.getPlayer().sendMessage("Blocks: " + allBlocks.size());
         event.setExpToDrop(event.getExpToDrop() * (allBlocks.size() + 1));
-        // event.getPlayer().sendMessage("Total Experience: " + event.getExpToDrop());
         for (Block toBreak : allBlocks) {
             if (toBreak.breakNaturally(hand)) {
                 if (hand.getEnchantments().containsKey(Enchantment.DURABILITY)) {
@@ -133,11 +133,10 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
                 } else {
                     hand.setDurability((short)(hand.getDurability() + 1));
                 }
-                if (hand.getType().getMaxDurability() == hand.getDurability()) {
-                    hand.setType(Material.getMaterial("AIR"));
-                    break;
-                }
             }
+        }
+        if (hand.getType().getMaxDurability() <= hand.getDurability()) {
+            hand.setType(Material.getMaterial("AIR"));
         }
     }
 
