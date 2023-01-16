@@ -1,4 +1,5 @@
 name: SimpleVeinMiner
 version: '${project.version}'
 main: net.miau.simpleveinminer.SimpleVeinMiner
+api-version: 1.13
 authors: [ Miau_ ]
