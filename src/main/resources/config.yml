@@ -1,2 +1,9 @@
 # Permission: simpleveinminer.use
 needsPermission: false
+checkForDiagonalOres: false
+cancelIfSneaking: false
+blacklistPickaxes:
+  enabled: false
+  list:
+    - 'wooden_pickaxe'
+    - 'stone_pickaxe'
