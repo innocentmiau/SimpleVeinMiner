@@ -12,7 +12,6 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 
 ## **config.yml** contents:
 > needsPermission: false
-
 > checkForDiagonalOres: false
 
 > cancelIfSneaking: false
