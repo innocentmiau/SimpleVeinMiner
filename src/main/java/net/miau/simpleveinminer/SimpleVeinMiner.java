@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class SimpleVeinMiner extends JavaPlugin implements Listener {
@@ -29,6 +30,8 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
     private boolean needsPermission = false;
     private boolean checkForDiagonalOres = false;
     private boolean cancelIfSneaking = false;
+    private boolean blacklistPickaxes_enabled = false;
+    private List<String> blacklistPickaxes_list;
 
     @Override
     public void onEnable() {
@@ -50,6 +53,26 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
             saveConfig();
         }
         this.cancelIfSneaking = getConfig().getBoolean("cancelIfSneaking");
+        if (!getConfig().contains("blacklistPickaxes.enabled")) {
+            getConfig().set("blacklistPickaxes.enabled", this.blacklistPickaxes_enabled);
+            saveConfig();
+        }
+        this.blacklistPickaxes_enabled = getConfig().getBoolean("blacklistPickaxes.enabled");
+        if (!getConfig().contains("blacklistPickaxes.list")) {
+            List<String> defaultBlacklist = new ArrayList<>();
+            defaultBlacklist.add("wooden_pickaxe");
+            defaultBlacklist.add("stone_pickaxe");
+            getConfig().set("blacklistPickaxes.list", defaultBlacklist);
+            saveConfig();
+        }
+        this.blacklistPickaxes_list = getConfig().getStringList("blacklistPickaxes.list");
+        if (this.blacklistPickaxes_enabled) {
+            List<String> newList = new ArrayList<>();
+            for (String s : this.blacklistPickaxes_list) {
+                newList.add(s.toLowerCase());
+            }
+            this.blacklistPickaxes_list = newList;
+        }
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
@@ -104,6 +127,7 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
         ItemStack hand = event.getPlayer().getInventory().getItemInMainHand();
         if (!hand.getType().toString().contains("_PICKAXE")) return;
         if (this.needsPermission && !player.hasPermission("simpleveinminer.use")) return;
+        if (this.blacklistPickaxes_enabled && this.blacklistPickaxes_list.contains(hand.getType().toString().toLowerCase())) return;
         ArrayList<Block> allBlocks = new ArrayList<>(blocksAround(event.getBlock()));
         int newBlocks = allBlocks.size();
         while (newBlocks > 0) {
