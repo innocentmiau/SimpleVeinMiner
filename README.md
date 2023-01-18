@@ -9,6 +9,7 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 - [x] Option for permission to use(read below config.yml information).
 - [x] Option to check for diagonal ores(read below config.yml information).
 - [x] Option to cancel if the player is sneaking(read below config.yml information).
+- [x] Option to enable a blacklist of pickaxes that cannot be used towards mining entire veins(read below config.yml information).
 
 ## **config.yml** contents:
 ```
