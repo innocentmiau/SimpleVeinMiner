@@ -11,10 +11,11 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 - [x] Option to cancel if the player is sneaking(read below config.yml information).
 
 ## **config.yml** contents:
-> needsPermission: false
-> checkForDiagonalOres: false
-
-> cancelIfSneaking: false
+```
+needsPermission: false
+checkForDiagonalOres: false
+cancelIfSneaking: false
+```
 
 - [ ] Permission for use if 'needsPermission' on the config is set to **true**: simpleveinminer.use
 - [ ] Option 'checkForDiagonalOres' if set to **true** will check the entirety of a vein even when blocks are not directyly touching(in diagonal directions). (This comes by default set to false)
