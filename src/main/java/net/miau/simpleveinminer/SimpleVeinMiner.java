@@ -32,6 +32,8 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
     private boolean cancelIfSneaking = false;
     private boolean blacklistPickaxes_enabled = false;
     private List<String> blacklistPickaxes_list;
+    private boolean blacklistWorlds_enabled = false;
+    private List<String> blacklistWorlds_list;
 
     @Override
     public void onEnable() {
@@ -72,6 +74,25 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
                 newList.add(s.toLowerCase());
             }
             this.blacklistPickaxes_list = newList;
+        }
+        if (!getConfig().contains("blacklistWorlds.enabled")) {
+            getConfig().set("blacklistWorlds.enabled", this.blacklistWorlds_enabled);
+            saveConfig();
+        }
+        this.blacklistWorlds_enabled = getConfig().getBoolean("blacklistWorlds.enabled");
+        if (!getConfig().contains("blacklistWorlds.list")) {
+            List<String> defaultBlacklist = new ArrayList<>();
+            defaultBlacklist.add("world_the_end");
+            getConfig().set("blacklistWorlds.list", defaultBlacklist);
+            saveConfig();
+        }
+        this.blacklistWorlds_list = getConfig().getStringList("blacklistWorlds.list");
+        if (this.blacklistWorlds_enabled) {
+            List<String> newList = new ArrayList<>();
+            for (String s : this.blacklistWorlds_list) {
+                newList.add(s.toLowerCase());
+            }
+            this.blacklistWorlds_list = newList;
         }
 
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -123,6 +144,7 @@ public final class SimpleVeinMiner extends JavaPlugin implements Listener {
                 || !event.getBlock().getType().toString().contains("_ORE")
                 || event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
         Player player = event.getPlayer();
+        if (this.blacklistWorlds_enabled && this.blacklistWorlds_list.contains(player.getWorld().getName())) return;
         if (this.cancelIfSneaking && player.isSneaking()) return;
         ItemStack hand = event.getPlayer().getInventory().getItemInMainHand();
         if (!hand.getType().toString().contains("_PICKAXE")) return;
