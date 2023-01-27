@@ -10,17 +10,30 @@ A minecraft simple plugin that allows players to instantly mine the entire vein.
 - [x] Option to check for diagonal ores(read below config.yml information).
 - [x] Option to cancel if the player is sneaking(read below config.yml information).
 - [x] Option to enable a blacklist of pickaxes that cannot be used towards mining entire veins(read below config.yml information).
+- [x] Option to enable a blacklist of worlds where the plugin won't work at all..
 
 ## **config.yml** contents:
 ```
 needsPermission: false
 checkForDiagonalOres: false
 cancelIfSneaking: false
+blacklistPickaxes:
+  enabled: false
+  list:
+   - 'wooden_pickaxe'
+   - 'stone_pickaxe'
+blacklistPickaxes:
+  enabled: false
+  list:
+   - 'wooden_pickaxe'
+    - 'stone_pickaxe'
 ```
 
 - [ ] Permission for use if 'needsPermission' on the config is set to **true**: simpleveinminer.use
 - [ ] Option 'checkForDiagonalOres' if set to **true** will check the entirety of a vein even when blocks are not directyly touching(in diagonal directions). (This comes by default set to false)
 - [ ] Option 'cancelIfSneaking' if set to **true** will allow players to not mine the entire vein when they are sneaking. (useful for mining ores used in builds or when a player doesn't want to break the entire vein with the same pickaxe, or other reasons)
+- [ ] Option 'blacklistPickaxes' if enabled you can costumize which pickaxes are blacklisted for choosing which pickaxes are not to allowed to mine entire veins.
+- [ ] Option 'blacklistWorlds' if enable you can setup a list of worlds where the plugin won't work on.
 
 ## Please let me know if something is missing on it.
 I tried to code it as simple and working as possible, below is my discord details for ideas or bug fixes(support):
