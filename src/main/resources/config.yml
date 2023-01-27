@@ -7,3 +7,7 @@ blacklistPickaxes:
   list:
     - 'wooden_pickaxe'
     - 'stone_pickaxe'
+blacklistWorlds:
+  enabled: false
+  list:
+    - 'world_the_end'
