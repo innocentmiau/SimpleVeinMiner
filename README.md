@@ -22,11 +22,10 @@ blacklistPickaxes:
   list:
    - 'wooden_pickaxe'
    - 'stone_pickaxe'
-blacklistPickaxes:
+blacklistWorlds:
   enabled: false
   list:
-   - 'wooden_pickaxe'
-    - 'stone_pickaxe'
+    - 'world_the_end'
 ```
 
 - [ ] Permission for use if 'needsPermission' on the config is set to **true**: simpleveinminer.use
